@@ -81,7 +81,7 @@ class TodoSimple(Resource):
     def post(self, todo_id):
         if request:
             try:
-                return str(dir(request))
+                return str(dir(request)) + "\n" + str(request.__dict__) + "\n" + str(request.form) + str(request.query_string)
             except:    
                 return request
         else:
