@@ -4,7 +4,9 @@ from requests import put, get, post
 
 # get('http://localhost:5000/todo1').json()
 
-print put('http://olin-api.heroku.com/todo2', data={'data': 'Change my brakepads'}).json()
+a = post('http://olin-api.heroku.com/todo1', params={'data': 'Change my brakepads'})
+print a.json()
+print a.url
 
 # get('http://localhost:5000/todo2').json()
 # print get('http://olin-api.heroku.com/todo1').json()
