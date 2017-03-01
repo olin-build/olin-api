@@ -49,17 +49,24 @@ def interact_with_database(instruction, debug=False):
         return store
 
 
+"""
+I think we're sending a r(R?)equest over. 
+The Resource then handles it and sends a Response back (it seems like it has to be a string). Maybe we can send json back?
+"""
+# http://flask.pocoo.org/docs/0.12/api/#flask.Request
+
 class TodoSimple(Resource):
     def get(self, todo_id):
         if request:
-            print(request.__repr__)
-            return request
+            try:
+                return request.data
+            except:    
+                return request
         else:
             return "get request."
 
     def put(self, todo_id):
         if request:
-            print(request.__repr__)
             return request
         else:
             return "put request."
@@ -70,8 +77,10 @@ class TodoSimple(Resource):
 
     def post(self, todo_id):
         if request:
-            print(request.__repr__)
-            return request
+            try:
+                return request.data
+            except:    
+                return request
         else:
             return "post request."
 
