@@ -66,11 +66,11 @@ class TodoSimple(Resource):
         #         return "todo_id = " + todo_id
 
     def put(self, todo_id):
-        if request.form:
-            return request.form
-        return "put request."
-        # todos[todo_id] = request.form['data']
-        # return {todo_id: todos[todo_id]}
+        # if request.form:
+            # return request.form
+        # return "put request."
+        todos[todo_id] = request.form['data']
+        return {todo_id: todos[todo_id]}
 
     def post(self, todo_id):
         if request.form:
