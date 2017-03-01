@@ -54,7 +54,6 @@ class TodoSimple(Resource):
     get('http://localhost:5000/todo1', data = {'test': 'testing'})"""
     def get(self, todo_id):
         if request.form: 
-            print(request.form)
             return interact_with_database(request.form['data'])
         else:
             try:
