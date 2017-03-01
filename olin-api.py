@@ -86,17 +86,17 @@ class TodoSimple(Resource):
 
     def post(self, todo_id):
         args = parser.parse_args()
-        try:
-            return str(args)
-        except:
+        # try:
+        return str(args)
+        # except:
             
-            if request:
-                try:
-                    return str(dir(request)) + "\n" + str(request.__dict__) + "\n" + str(request.form) + str(request.query_string)
-                except:    
-                    return request
-            else:
-                return "post request."
+        #     if request:
+        #         try:
+        #             return str(dir(request)) + "\n" + str(request.__dict__) + "\n" + str(request.form) + str(request.query_string)
+        #         except:    
+        #             return request
+        #     else:
+        #         return "post request."
 
 api.add_resource(TodoSimple, '/<string:todo_id>', '/')
 
