@@ -74,7 +74,7 @@ class TodoSimple(Resource):
     def put(self, todo_id):
         args = parser.parse_args()
         # try:
-        # return str(args)
+        return str(args)
         # if request:
         #     try:
         #         return str(dir(request))
