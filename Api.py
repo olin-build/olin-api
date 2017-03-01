@@ -52,7 +52,8 @@ def interact_with_database(instruction, debug=False):
 class TodoSimple(Resource):
     def get(self, todo_id):
         if request:
-            return str(request)
+            print str(request), request.__repr__
+            return str(request), request.__repr__
         else:
             return "get request."
 
@@ -65,7 +66,8 @@ class TodoSimple(Resource):
 
     def post(self, todo_id):
         if request:
-            return str(request)
+            print str(request), request.__repr__
+            return str(request), request.__repr__
         else:
             return "post request."
 
