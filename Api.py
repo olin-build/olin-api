@@ -53,20 +53,22 @@ class TodoSimple(Resource):
     """a get request can have a request.form e.g. 
     get('http://localhost:5000/todo1', data = {'test': 'testing'})"""
     def get(self, todo_id):
-        if request.form: 
-            return interact_with_database(request.form['data'])
-        else:
-            try:
-                return {todo_id: todos[todo_id]}
-            except:
-                return "todo_id = " + todo_id
+        return "get request."
+        # if request.form: 
+        #     return interact_with_database(request.form['data'])
+        # else:
+        #     try:
+        #         return {todo_id: todos[todo_id]}
+        #     except:
+        #         return "todo_id = " + todo_id
 
     def put(self, todo_id):
+        return "put request."
         todos[todo_id] = request.form['data']
         return {todo_id: todos[todo_id]}
 
     def post(self, todo_id):
-        return("XXXXXXX", request.form)
+        return "post request."
         # todos[todo_id] = request.form['data']
         # return {todo_id: todos[todo_id]}
 
