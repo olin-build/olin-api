@@ -55,9 +55,12 @@ class TodoSimple(Resource):
     def get(self, todo_id):
         if request.form: 
             print(request.form)
-            return interact_with_database(request.form['query'])
+            return interact_with_database(request.form['data'])
         else:
-            return {todo_id: todos[todo_id]}
+            try:
+                return {todo_id: todos[todo_id]}
+            except:
+                return "todo_id = " + todo_id
 
     def put(self, todo_id):
         todos[todo_id] = request.form['data']
