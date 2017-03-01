@@ -72,13 +72,16 @@ class TodoSimple(Resource):
             return "get request."
 
     def put(self, todo_id):
-        if request:
-            try:
-                return str(dir(request))
-            except:    
-                return request
-        else:
-            return "put request."
+        args = parser.parse_args()
+        # try:
+        # return str(args)
+        # if request:
+        #     try:
+        #         return str(dir(request))
+        #     except:    
+        #         return request
+        # else:
+        #     return "put request."
         #     # return request.form
         # # return "put request."
         # todos[todo_id] = request.form['data']
@@ -89,7 +92,7 @@ class TodoSimple(Resource):
         # try:
         return str(args)
         # except:
-            
+
         #     if request:
         #         try:
         #             return str(dir(request)) + "\n" + str(request.__dict__) + "\n" + str(request.form) + str(request.query_string)
