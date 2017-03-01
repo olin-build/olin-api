@@ -62,12 +62,8 @@ class TodoSimple(Resource):
                 return "todo_id = " + todo_id
 
     def put(self, todo_id):
-        temp = request.form['data']
-        if temp:
-            result = interact_with_database(temp)
-            return result
-        else:
-            return "temp does not exist", request.form
+        todos[todo_id] = request.form['data']
+        return {todo_id: todos[todo_id]}
 
 api.add_resource(TodoSimple, '/<string:todo_id>')
 

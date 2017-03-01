@@ -10,4 +10,4 @@ from requests import put, get
 print get('http://olin-api.heroku.com/todo1').json()
 print get('http://olin-api.heroku.com/todo1', data = {'data': 'select * from events where event_id is not null'}).json()
 
-print put('http://olin-api.heroku.com/todo1', data={'data': 'select * from events where event_id is not null'}).json()
+print put('http://olin-api.heroku.com/todo2', data={'data': 'Change my brakepads'}).json()
