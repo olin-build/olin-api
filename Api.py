@@ -8,7 +8,7 @@ import urllib.parse
 app = Flask(__name__)
 api = Api(app)
 
-todos = {}
+todos = {'todo1':'take out trash'}
 
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
