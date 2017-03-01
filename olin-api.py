@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 
 import psycopg2
 import os
@@ -12,6 +12,12 @@ todos = {'todo1':'take out trash'}
 
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+
+
+parser = reqparse.RequestParser()
+parser.add_argument('data')
+parser.add_argument('a')
+
 
 #CHECK THE PROCFILE! I THINK WE HAVE TO RUN THIS AS WEB
 
@@ -79,13 +85,18 @@ class TodoSimple(Resource):
         # return {todo_id: todos[todo_id]}
 
     def post(self, todo_id):
-        if request:
-            try:
-                return str(dir(request)) + "\n" + str(request.__dict__) + "\n" + str(request.form) + str(request.query_string)
-            except:    
-                return request
-        else:
-            return "post request."
+        args = parser.parse_args()
+        try:
+            return str(args)
+        except:
+            
+            if request:
+                try:
+                    return str(dir(request)) + "\n" + str(request.__dict__) + "\n" + str(request.form) + str(request.query_string)
+                except:    
+                    return request
+            else:
+                return "post request."
 
 api.add_resource(TodoSimple, '/<string:todo_id>', '/')
 
