@@ -72,9 +72,12 @@ class TodoSimple(Resource):
             return "get request."
 
     def put(self, todo_id):
+        dct = {}
         args = parser.parse_args()
+        data = {'data':args['data']}        
+        dct[todo_id] = data
         # try:
-        return str(args)
+        return str(dct)
         # if request:
         #     try:
         #         return str(dir(request))
