@@ -64,8 +64,8 @@ class TodoSimple(Resource):
         return {todo_id: todos[todo_id]}
 
     def post(self, todo_id):
-        if request.form:
-            return request.form
+        if request:
+            return request
         else:
             return "post request."
 
