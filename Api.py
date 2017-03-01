@@ -66,6 +66,7 @@ class TodoSimple(Resource):
         return {todo_id: todos[todo_id]}
 
     def post(self, todo_id):
+        print(request.form)
         todos[todo_id] = request.form['data']
         return {todo_id: todos[todo_id]}
 
