@@ -6,7 +6,7 @@ from requests import put, get, post
 
 a = post('http://olin-api.heroku.com/todo1', params={'data': 'Change my brakepads'})
 # print a.json()
-print a.json()
+print str(a)
 
 # get('http://localhost:5000/todo2').json()
 # print get('http://olin-api.heroku.com/todo1').json()
