@@ -14,7 +14,7 @@ from requests import put, get, post
 # print b.__repr__
 # print b.json()
 
-c = put('http://olin-api.heroku.com/test', data={'data': 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'})
+c = get('http://olin-api.heroku.com/test', data={'data': 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'})
 
 print c.__repr__
 print c.json()
