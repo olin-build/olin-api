@@ -13,7 +13,7 @@ todos = {'todo1':'take out trash'}
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
-#CHECK THE PROCFILE! NOT ENTIRELY SURE IF WE CAN RUN THIS AS WORKER
+#CHECK THE PROCFILE! I THINK WE HAVE TO RUN THIS AS WEB
 
 def make_conn():
     global url
