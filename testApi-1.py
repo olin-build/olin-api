@@ -5,8 +5,12 @@ from requests import put, get, post
 # get('http://localhost:5000/todo1').json()
 
 a = post('http://olin-api.heroku.com/todo1', params={'data': 'Change my brakepads'})
-# print a.json()
-print a.url
+# a is a Response type
+print a.__repr__
+
+b = get('http://olin-api.heroku.com/todo1', params={'data': 'Change my brakepads'})
+#so is b
+print b.__repr__
 
 # get('http://localhost:5000/todo2').json()
 # print get('http://olin-api.heroku.com/todo1').json()
