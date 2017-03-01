@@ -4,15 +4,20 @@ from requests import put, get, post
 
 # get('http://localhost:5000/todo1').json()
 
-a = post('http://olin-api.heroku.com/todo1', params={'data': 'Change my brakepads'})
+a = post('http://olin-api.heroku.com/todo1', data={'data': 'Change my brakepads'})
 # a is a Response type
 print a.__repr__
 print a.json()
 
-b = get('http://olin-api.heroku.com/todo1', params={'data': 'Change my brakepads'})
+b = get('http://olin-api.heroku.com/todo1', data={'data': 'Change my brakepads', 'a':'b'})
 #so is b
 print b.__repr__
 print b.json()
+
+c = put('http://olin-api.heroku.com/todo1', data={'data': 'Change my brakepads'})
+
+print c.__repr__
+print c.json()
 
 # get('http://localhost:5000/todo2').json()
 # print get('http://olin-api.heroku.com/todo1').json()

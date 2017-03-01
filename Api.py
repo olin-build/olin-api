@@ -59,7 +59,7 @@ class TodoSimple(Resource):
     def get(self, todo_id):
         if request:
             try:
-                return "request form:" + str(request.form)
+                return "request form:" + str(request.form) + str(request.args)
             except:    
                 return request
         else:
@@ -68,7 +68,7 @@ class TodoSimple(Resource):
     def put(self, todo_id):
         if request:
             try:
-                return "request form:" + str(request.form)
+                return "request form:" + str(request.form) + str(request.args)
             except:    
                 return request
         else:
@@ -81,7 +81,7 @@ class TodoSimple(Resource):
     def post(self, todo_id):
         if request:
             try:
-                return "request form:" + str(request.form)
+                return "request form:" + str(request.form) + str(request.args)
             except:    
                 return request
         else:
