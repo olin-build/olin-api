@@ -68,7 +68,7 @@ class TodoSimple(Resource):
     def put(self, todo_id):
         if request:
             try:
-                return "request form:" + str(request.form) + str(request.args)
+                return str(dir(request))
             except:    
                 return request
         else:
@@ -87,7 +87,7 @@ class TodoSimple(Resource):
         else:
             return "post request."
 
-api.add_resource(TodoSimple, '/<string:todo_id>')
+api.add_resource(TodoSimple, '/<string:todo_id>', '/')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000)) #not sure this will work
