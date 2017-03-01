@@ -8,4 +8,4 @@ from requests import put, get
 
 # get('http://localhost:5000/todo2').json()
 
-get('http://olin-api.heroku.com/todo1', data = {'data': 'select * from events where event_id is not null'})
+print get('http://olin-api.heroku.com/todo1', data = {'data': 'select * from events where event_id is not null'})
