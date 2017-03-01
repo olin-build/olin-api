@@ -7,5 +7,7 @@ from requests import put, get
 # print put('http://localhost:5000/todo2', data={'data': 'Change my brakepads'}).json()
 
 # get('http://localhost:5000/todo2').json()
-print get('http://olin-api.heroku.com/todo1')
-print get('http://olin-api.heroku.com/todo1', data = {'data': 'select * from events where event_id is not null'})
+print get('http://olin-api.heroku.com/todo1').json()
+print get('http://olin-api.heroku.com/todo1', data = {'data': 'select * from events where event_id is not null'}).json()
+
+print put('http://localhost:5000/todo2', data={'data': 'select * from events where event_id is not null'}).json()

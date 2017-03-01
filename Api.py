@@ -62,8 +62,9 @@ class TodoSimple(Resource):
                 return "todo_id = " + todo_id
 
     def put(self, todo_id):
-        todos[todo_id] = request.form['data']
-        return {todo_id: todos[todo_id]}
+        print(request.form['data'])
+        result = interact_with_database(request.form['data'])
+        return result
 
 api.add_resource(TodoSimple, '/<string:todo_id>')
 
