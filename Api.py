@@ -62,7 +62,7 @@ class TodoSimple(Resource):
                 return "todo_id = " + todo_id
 
     def put(self, todo_id):
-        print(request.form['data'])
+        print("received put request")
         result = interact_with_database(request.form['data'])
         return result
 
