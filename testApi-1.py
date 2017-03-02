@@ -1,13 +1,9 @@
 from requests import put, get, post
 import os
 
-if os.environ.get('DATABASE_URL'):
-    c = get('http://olin-api.heroku.com/test', params={ 'data': 'data to be sent here', 'a':'b' })
-    print c
-    print c.__repr__
-    print c.json()
+testing_local_app = True
 
-else:
+if testing_local_app:
     get_req = get('http://localhost:5000/test', data={ 'data': 'get request data?', 'a':'b', 'c':'d' })
     print get_req
     # print get_req.__repr__
@@ -23,6 +19,26 @@ else:
     print put_req
     # print put_req.__repr__
     print put_req.json()
+
+
+else:
+    get_req = get('http://olin-api.heroku.com/test', data={ 'data': 'get request data?', 'a':'b', 'c':'d' })
+    print get_req
+    # print get_req.__repr__
+    print get_req.json()
+
+
+    post_req = post('http://olin-api.heroku.com/test', data={ 'data': 'post request data', 'a':'b', 'c':'d' })
+    print post_req
+    # print post_req.__repr__
+    print post_req.json()
+
+    put_req = put('http://olin-api.heroku.com/test', data={ 'data': 'put request data', 'a':'b', 'c':'d' })
+    print put_req
+    # print put_req.__repr__
+    print put_req.json()
+
+
 
 
 ### Unused Queries ###
