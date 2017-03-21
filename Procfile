@@ -1,1 +1,1 @@
-web: python olin-api.py
+web: python run.py

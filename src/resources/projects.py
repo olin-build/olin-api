@@ -1,10 +1,16 @@
-from flask import Flask, request
+""" Exists at `/projects` and offers endpoints to conduct CRUD operations on a
+database of Olin projects """
+
+from flask import Blueprint
 from flask_restful import Resource, Api, reqparse
-import os
 
-app = Flask(__name__)
-api = Api(app)
+from .. import db
 
+# Blueprint setup
+projects = Blueprint('projects', __name__)
+api = Api(projects)
+
+# Set up a parser
 parser = reqparse.RequestParser()
 
 parser.add_argument('data')
@@ -13,7 +19,7 @@ parser.add_argument('c')
 
 
 """
-I think we're sending a r(R?)equest over. 
+I think we're sending a r(R?)equest over.
 The Resource then handles it and sends a Response back (it seems like it has to be a string). Maybe we can send json back?
 """
 # http://flask.pocoo.org/docs/0.12/api/#flask.Request
@@ -44,12 +50,6 @@ class DatabaseResource(Resource):
         return "post request with args = " + str(args) + "and sorted args = " + str(doSomething(args))
 
 
-api.add_resource(DatabaseResource, '/<string:query>', '/')
+# Resources
+api.add_resource(DatabaseResource, '/<string:query>')
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000)) #not sure this will work
-    if os.environ.get('MONGODB_URI'):
-        import database_connection_mongo
-        app.run(host='0.0.0.0', debug=True, port=port)
-    else:
-        app.run(host='127.0.0.1', debug=True, port=port)
