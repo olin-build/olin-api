@@ -1,4 +1,4 @@
 flask
 flask_restful
 requests==2.13.0
-psycopg2
+bson
