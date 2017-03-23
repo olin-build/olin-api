@@ -10,36 +10,38 @@ def print_debug(thing):
     except:
         print(str(thing))
 
+data1 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'delete', 'data':{}}})}
+
+data2 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'insert', 
+                                                                                'data':[{'1':'6'},{'1':'7'},{'1':'8'}]}})}
+
+data3 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
+
+data4 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': {'op':'update', 
+                                                                                'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})}})}
+
+data5 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': {'op':'delete', 'data':{'1':{'$eq':'6'}}}})}
+
+data6 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
+
 if testing_local_app:
-    post_request1 = post('http://localhost:5000/test', data = {'data':json.dumps(
-                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'delete', 'data':{}}}
-                                                                                )})
-    print_debug(post_request1)
+    post_request_delete_all = post('http://localhost:5000/test', data = data1)
+    print_debug(post_request_delete_all)
 
-    post_request2 = post('http://localhost:5000/test', data = {'data':json.dumps(
-                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'insert', 'data':[{'1':'6'},{'1':'7'},{'1':'8'}]}}
-                                                                                )})
-    print_debug(post_request2)
+    post_request_insert = post('http://localhost:5000/test', data = data2)
+    print_debug(post_request_insert)
 
-    post_request3 = post('http://localhost:5000/test', data = {'data':json.dumps(
-                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}}
-                                                                                )})
-    print_debug(post_request3)
+    post_request_find_some = post('http://localhost:5000/test', data = data3)
+    print_debug(post_request_find_some)
 
-    post_request4 = post('http://localhost:5000/test', data = {'data':json.dumps(
-                                                                                {'requestLocation':'test-collection', 'instruction': {'op':'update', 'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})}}
-                                                                                )})
-    print_debug(post_request4)
+    post_request_update = post('http://localhost:5000/test', data = data4)
+    print_debug(post_request_update)
 
-    post_request5 = post('http://localhost:5000/test', data = {'data':json.dumps(
-                                                                                {'requestLocation':'test-collection', 'instruction': {'op':'delete', 'data':{'1':{'$eq':'6'}}}}
-                                                                                )})     
-    print_debug(post_request5)
+    post_request_delete = post('http://localhost:5000/test', data = data5)     
+    print_debug(post_request_delete)
 
-    post_request6 = post('http://localhost:5000/test', data = {'data':json.dumps(
-                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}}
-                                                                                )})
-    print_debug(post_request6)
+    post_request_find_final = post('http://localhost:5000/test', data = data6)
+    print_debug(post_request_find_final)
 
 
 
