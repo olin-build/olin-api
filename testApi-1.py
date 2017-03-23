@@ -1,37 +1,45 @@
 from requests import put, get, post
+import json
 import os
 
 testing_local_app = True
 
+def print_debug(thing):
+    try:
+        print(thing.json())
+    except:
+        print(str(thing))
+
 if testing_local_app:
-    # get_req = get('http://localhost:5000/test', data={ 'data': 'get request data?', 'a':'b', 'c':'d' })
-    # print get_req
-    # # print get_req.__repr__
-    # print get_req.json()
+    post_request1 = post('http://localhost:5000/test', data = {'data':json.dumps(
+                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'delete', 'data':{}}}
+                                                                                )})
+    print_debug(post_request1)
 
+    post_request2 = post('http://localhost:5000/test', data = {'data':json.dumps(
+                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'insert', 'data':[{'1':'6'},{'1':'7'},{'1':'8'}]}}
+                                                                                )})
+    print_debug(post_request2)
 
-    # post_req = post('http://localhost:5000/test', data={ 'data': 'post request data', 'a':'b', 'c':'d' })
-    # print post_req
-    # # print post_req.__repr__
-    # print post_req.json()
+    post_request3 = post('http://localhost:5000/test', data = {'data':json.dumps(
+                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}}
+                                                                                )})
+    print_debug(post_request3)
 
-    # put_req = put('http://localhost:5000/test', data={ 'data': 'put request data', 'a':'b', 'c':'d' })
-    # print put_req
-    # # print put_req.__repr__
-    # print put_req.json()
+    post_request4 = post('http://localhost:5000/test', data = {'data':json.dumps(
+                                                                                {'requestLocation':'test-collection', 'instruction': {'op':'update', 'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})}}
+                                                                                )})
+    print_debug(post_request4)
 
-    post_request1 = post('http://localhost:5000/test', data = {'requestLocation':'test-collection', 'instruction':{'op':'delete', 'data':{}}})
-    print(post_request1)
-    post_request2 = post('http://localhost:5000/test', data = {'requestLocation':'test-collection', 'instruction':{'op':'insert', 'data':[{'1':'6'},{'1':'7'},{'1':'8'}]}})
-    print(post_request2)
-    post_request3 = post('http://localhost:5000/test', data = {'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})
-    print(post_request3)
-    post_request4 = post('http://localhost:5000/test', data = {'requestLocation':'test-collection', 'instruction': {'op':'update', 'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})}})
-    print(post_request4)
-    post_request5 = post('http://localhost:5000/test', data = {'requestLocation':'test-collection', 'instruction': {'op':'delete', 'data':{'1':{'$eq':'6'}}}})     
-    print(post_request5)
-    post_request6 = post('http://localhost:5000/test', data = {'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})
-    print(post_request6)
+    post_request5 = post('http://localhost:5000/test', data = {'data':json.dumps(
+                                                                                {'requestLocation':'test-collection', 'instruction': {'op':'delete', 'data':{'1':{'$eq':'6'}}}}
+                                                                                )})     
+    print_debug(post_request5)
+
+    post_request6 = post('http://localhost:5000/test', data = {'data':json.dumps(
+                                                                                {'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}}
+                                                                                )})
+    print_debug(post_request6)
 
 
 

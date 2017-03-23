@@ -2,14 +2,18 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import os
 import database_connection_mongo
+import requests
+import json
 
 app = Flask(__name__)
 api = Api(app)
 
 parser = reqparse.RequestParser()
 
-parser.add_argument('requestLocation')
-parser.add_argument('instruction')
+# parser.add_argument('requestLocation')
+# parser.add_argument('instruction')
+# parser.add_argument('op')
+parser.add_argument('data')
 
 
 """
@@ -37,13 +41,19 @@ class DatabaseResource(Resource):
 
     def put(self, query):
         args = parser.parse_args() #args is the dictionary of stuff sent over by the request. On the request side we send post(URL, data = args)
+        #everything in args is a string!
         return "put request with args = " + str(args) + " and sorted args = " + str(do_something(args))
 
     def post(self, query):
         args = parser.parse_args()
-        return database_connection_mongo.handle_request(args[requestLocation],args[instruction])
+        dataDict = json.loads(args.data)
+        assert isinstance(dataDict,dict)
+        result = database_connection_mongo.handle_request(dataDict['requestLocation'],dataDict['instruction'])
+        try:
+            return json.dumps([k for k in result])
+        except:
+            return str(result)
   
-        # return "post request with args = " + str(args) + "and sorted args = " + str(do_something(args))
 
 
 api.add_resource(DatabaseResource, '/<string:query>', '/')

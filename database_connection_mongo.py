@@ -5,6 +5,7 @@
 from bson import SON
 import pymongo
 import os
+import json
 
 
 
@@ -81,15 +82,20 @@ def execute(database, collectionName, instruction):
     {'op':'insert', 'data':[document1, document2]}
     
     """
-    commandDict = {'insert': lambda x: database[collectionName].insert_many(x),         # requires a list of documents
-                    'find': lambda x: database[collectionName].find(x),                 # requires a filter
-                    'delete': lambda x: database[collectionName].delete_many(x),        # requires a filter
-                    'update': lambda x: database[collectionName].update_many(x[0],x[1]) # requires a filter and actions to perform on matching documents
+    commandDict = {'insert': lambda x: database[collectionName].insert_many(x),          # requires a list of documents
+                    'find': lambda x: database[collectionName].find(x, {'_id':False}), # requires a filter
+                    'delete': lambda x: database[collectionName].delete_many(x),         # requires a filter
+                    'update': lambda x: database[collectionName].update_many(x[0],x[1])  # requires a filter and actions to perform on matching documents
                     }
 
     operation = instruction['op'] #operation is 'find', 'update', 'insert' or 'delete'
     function = commandDict[operation]
-    return commandDict[operation](instruction['data'])
+    result = commandDict[operation](instruction['data'])
+    if instruction['op']=='find':
+        return [k for k in result]
+    else:
+        return result
+
 
     
 
@@ -141,26 +147,6 @@ def handle_request(requestLocation, instruction):
 
 
 
-
-# def make_client():
-#     return pymongo.MongoClient(uri)
-
-# def close_client(client):
-#     client.close()
-
-# def return_database_collection(databaseName, collectionName):
-#     """
-#     A mongoDB server contains some databases. 
-#     Each database contains some tables called collections.
-#     Each collection contains some BSON objects called documents
-#     """
-#     client = make_client()
-#     return client[databaseName][collectionName]
-
-
-# def interact(databaseName, collectionName, instruction):
-#     pass
-
 if __name__ == '__main__':
     requestLocation = ('test','test-collection')
     clear = handle_request(requestLocation, {'op':'delete', 'data':{}})
@@ -169,8 +155,6 @@ if __name__ == '__main__':
     c = handle_request(requestLocation,{'op':'find', 'data':{'1':{'$gt':'1'}}})
     d = handle_request(requestLocation,{'op':'update', 'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})})
     e = handle_request(requestLocation,{'op':'delete', 'data':{'1':{'$eq':'1'}}})
-    for item in [a,b,c,d,e]:
-        try:
-            print([k for k in item])
-        except:
-            print(item.acknowledged)
+
+
+    print(json.dumps(c))
