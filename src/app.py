@@ -4,6 +4,7 @@ from flask import Flask
 
 from src.resources.projects import projects
 from src.resources.auth import auth
+from src.resources.person import people
 
 # Keep create_app in a separate module so that it can be imported and used in
 # tests without creating a new app just by importing run. That has side effects
@@ -31,5 +32,6 @@ to a config file to use for this deployment.")
 
     app.register_blueprint(projects, url_prefix='/projects')
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(people, url_prefix='/people')
 
     return app

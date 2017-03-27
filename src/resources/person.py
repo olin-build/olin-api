@@ -1,5 +1,5 @@
-""" Exists at `/projects` and offers endpoints to conduct CRUD operations on a
-database of Olin projects """
+""" Exists at `/people` and offers endpoints to conduct CRUD operations on a
+database of Olin people """
 
 from flask import Blueprint, request
 from flask_restful import Resource, Api, reqparse
@@ -7,8 +7,8 @@ from flask_restful import Resource, Api, reqparse
 # from .. import db
 
 # Blueprint setup
-projects = Blueprint('projects', __name__)
-api = Api(projects)
+people = Blueprint('people', __name__)
+api = Api(people)
 
 # Set up a parser
 # parser = reqparse.RequestParser()
@@ -38,18 +38,17 @@ def searchSomething(query):
 
 
 class DatabaseResource(Resource):
-    def get(self, query):
-        return searchSomething(query)
+    def get(self):
+        payload = request.args #[request.args[k] for k in request.args]
+        return str(payload) #searchSomething(query)
 
-    def put(self, query):
-        args = parser.parse_args() #args is a dictionary of stuff sent over by the request.
-        return "put request with args = " + str(args) + " and sorted args = " + str(doSomething(args))
+    def put(self):
+        return request.get_json()
 
-    def post(self, query):
-        args = parser.parse_args()
-        return "post request with args = " + str(args) + "and sorted args = " + str(doSomething(args))
+    def post(self):
+        return request.get_json()
 
 
 # Resources
-api.add_resource(DatabaseResource, '/') #url_prefix registered as /projects on src/app.py
+api.add_resource(DatabaseResource, '/') #url_prefix is registered as /people in src/app.py
 
