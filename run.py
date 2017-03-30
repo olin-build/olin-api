@@ -1,11 +1,12 @@
 import os
 
-# import database_connection_mongo
-
 from src.app import create_app
 
 app = create_app()
 
-port = int(os.environ.get('PORT', 5000)) #not sure this will work
+port = int(os.environ.get('PORT', 5000))
 
-app.run(host='127.0.0.1', debug=True, port=port)
+if os.environ.get('MONGODB_URI'):
+    app.run(host='0.0.0.0', debug=True, port=port)
+else:
+    app.run(host='127.0.0.1', debug=True, port=port)

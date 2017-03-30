@@ -1,8 +1,10 @@
 """ Exists at `/projects` and offers endpoints to conduct CRUD operations on a
 database of Olin projects """
 
+
 from flask import Blueprint
 from flask_restful import Resource, Api
+
 
 # Blueprint setup
 projects = Blueprint('projects', __name__)
@@ -23,4 +25,5 @@ class Project(Resource):
 
 # Resources
 api.add_resource(Project, '/')
+
 
