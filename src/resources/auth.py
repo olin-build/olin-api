@@ -7,15 +7,16 @@ from flask_restful import Resource, Api
 auth = Blueprint('auth', __name__)
 api = Api(auth)
 
+
 class AuthedUser(Resource):
     """ Request a user profile, which will only be returned if that user can be
     successfully authenticated against Olin's LDAP server """
 
     def get(self):
-        return "get"
+        raise NotImplementedError
 
     def post(self):
-        return "post request with args = " + str(args) + "and sorted args = " + str(doSomething(args))
+        raise NotImplementedError
 
 
 # Resources
