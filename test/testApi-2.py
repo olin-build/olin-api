@@ -25,11 +25,11 @@ data5 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': 
 data6 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
 
 if testing_local_app:
-    get_request = get('http://localhost:5000/people/?key1=value1&key2=value2')
+    get_request = get('http://localhost:5000/people/?MINcommunityYear=2016&MAXcommunityYear=2017&fName=Jane')
     print_debug(get_request)
 
-    # post_request_delete_all = post('http://localhost:5000/people/query', json = data1)
-    # print_debug(post_request_delete_all)
+    post_request_insert = post('http://localhost:5000/people/', json={'fName':'Bob','lName':'Burger','communityYear':'2014'})
+    print_debug(post_request_insert)
 
     # post_request_insert = post('http://localhost:5000/test', data = data2)
     # print_debug(post_request_insert)
