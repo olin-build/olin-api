@@ -17,6 +17,15 @@ class PersonEndpoint(Resource):
     """ Allows for querying, editing, and inserting people in the database """
 
     def get(self):
+        """
+        Returns one or more user objects
+
+        Params:
+            email   User's email address
+            fname   First name of the user
+            lname   Last name of the user
+            comyear Community year of the user
+        """
         raise NotImplementedError
 
     def put(self):

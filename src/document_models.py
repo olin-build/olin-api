@@ -1,6 +1,6 @@
 """ Contains all of the mongoengine models for data held in mongo """
 
-from mongoengine import Document, StringField, IntField
+from mongoengine import Document, StringField, IntField, ListField
 
 class Person(Document):
     """
@@ -13,3 +13,13 @@ class Person(Document):
     fName = StringField(max_length=240, required=True)
     lName = StringField(max_length=240, required=True)
     communityYear = IntField()
+    email = StringField(max_length=100, required=True)
+    pronouns = StringField(max_length=100)
+    preferredName = StringFIeld(max_length=240)
+    services = ListField()
+
+    # TODO:
+    # add role at Olin
+    # BOW students?
+    # allergies/diet
+    # image/gravatar
