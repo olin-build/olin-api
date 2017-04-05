@@ -3,6 +3,7 @@ database of Olin people """
 
 from flask import Blueprint, request
 from flask_restful import Resource, Api
+from src.document_models import Person
 # from src.database_connection_mongoengine import handle_get_request
 
 # Blueprint setup
@@ -21,15 +22,47 @@ class PersonEndpoint(Resource):
         Returns one or more user objects
 
         Params:
-            email   User's email address
-            fname   First name of the user
-            lname   Last name of the user
-            comyear Community year of the user
+            email       User's email address
+            fName       First name of the user
+            lName       Last name of the user
+            comYearMIN  Minimum community year of the user (inclusive)
+            comYearMAX  Maximum community year of the user (inclusive)
         """
-        raise NotImplementedError
+        """
+        we pull everything with db.query(all)? 
+        Or query = Person.objects() and then 
+        if params.get('fName'):
+            query = query.filter(fName = params['fName'])
+        if params.get('comYearMIN'):
+            query = query.filter(comYear > int(params['comYearMIN']))
+
+        and then at the end:
+        return [person.to_json() for person in query]
+
+        """
+        params = request.args
+        query = Person.objects()
+        if params.get('fName'):
+            query = query.filter(fName = params['fName'])
+        if params.get('lName'):
+            query = query.filter(lName = params['lName'])
+        if params.get('email'):
+            query = query.filter(email = params['email'])
+        if params.get('comYearMIN'):
+            query = query.filter(comYear__gte = int(params['comYearMIN']))
+        if params.get('comYearMAX'):
+            query = query.filter(comYear__lte = int(params['comYearMAX']))
+        return [person.to_json() for person in query]
 
     def put(self):
-        raise NotImplementedError
+        """
+        If requests.json's fields do not match those defined in the Person model, this fails. 
+        See documentation for src.document_models.Person for more details.
+        """
+        object = Person(**request.json) 
+        object.save()
+        return object.to_json()
+
 
     def post(self):
         raise NotImplementedError
