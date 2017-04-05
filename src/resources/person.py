@@ -65,7 +65,20 @@ class PersonEndpoint(Resource):
 
 
     def post(self):
-        raise NotImplementedError
+        params = request.args
+        postQuery = Person.objects()
+        if params.get('fName'):
+            postQuery = postQuery.filter(fName = params['fName'])
+        if params.get('lName'):
+            postQuery = postQuery.filter(lName = params['lName'])
+        if params.get('email'):
+            postQuery = postQuery.filter(email = params['email'])
+        if params.get('comYearMIN'):
+            postQuery = postQuery.filter(comYear__gte = int(params['comYearMIN']))
+        if params.get('comYearMAX'):
+            postQuery = postQuery.filter(comYear__lte = int(params['comYearMAX']))
+        postQuery.update(**request.json)
+        return "Update Request Received"
 
 
 # Resources

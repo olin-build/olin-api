@@ -10,29 +10,40 @@ def print_debug(thing):
     except:
         print(str(thing))
 
-data1 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'delete', 'data':{}}})}
+# data1 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'delete', 'data':{}}})}
 
-data2 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'insert', 
-                                                                                'data':[{'1':'6'},{'1':'7'},{'1':'8'}]}})}
+# data2 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'insert', 
+#                                                                                 'data':[{'1':'6'},{'1':'7'},{'1':'8'}]}})}
 
-data3 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
+# data3 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
 
-data4 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': {'op':'update', 
-                                                                                'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})}})}
+# data4 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': {'op':'update', 
+#                                                                                 'data':({'1':{'$gt':'1'}},{'$set':{'secondfield':'test'}})}})}
 
-data5 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': {'op':'delete', 'data':{'1':{'$eq':'6'}}}})}
+# data5 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction': {'op':'delete', 'data':{'1':{'$eq':'6'}}}})}
 
-data6 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
+# data6 = {'data':json.dumps({'requestLocation':'test-collection', 'instruction':{'op':'find', 'data':{'1':{'$gt':'1'}}}})}
 
 if testing_local_app:
-    get_request = get('http://localhost:5000/people/?comYearMIN=2016&comYearMAX=2017')
+    get_request = get('http://localhost:5000/people/?comYearMIN=2000&comYearMAX=2017')
     print_debug(get_request)
+    print()
 
-    # put_request_insert = post('http://localhost:5000/people/', json={'fName':'Abraham','lName':'Lincoln','comYear':2018, 'preferredName":'Abe', email':'AbeLincoln@gmail.com'})
+    # put_request_insert = put('http://localhost:5000/people/', json={'fName':'Abraham','lName':'Lincoln','comYear':2018, 'preferredName':'Abe', 'email':'AbeLincoln@gmail.com'})
     # print_debug(put_request_insert)
+    # print()
 
-    # post_request_insert = post('http://localhost:5000/test', data = data2)
-    # print_debug(post_request_insert)
+    post_request_insert = post('http://localhost:5000/people/?comYearMIN=2016&comYearMAX=2017', json={'comYear':2000})
+    print_debug(post_request_insert)
+    print()
+
+    get_request_1 = get('http://localhost:5000/people/?comYearMIN=2000&comYearMAX=2017')
+    print_debug(get_request_1)
+    print()
+
+
+
+
 
     # post_request_find_some = post('http://localhost:5000/test', data = data3)
     # print_debug(post_request_find_some)
