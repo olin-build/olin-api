@@ -4,7 +4,6 @@ database of Olin people """
 from flask import Blueprint, request
 from flask_restful import Resource, Api
 from src.document_models import Person
-# from src.database_connection_mongoengine import handle_get_request
 
 # Blueprint setup
 people = Blueprint('people', __name__)
@@ -27,18 +26,6 @@ class PersonEndpoint(Resource):
             lName       Last name of the user
             comYearMIN  Minimum community year of the user (inclusive)
             comYearMAX  Maximum community year of the user (inclusive)
-        """
-        """
-        we pull everything with db.query(all)? 
-        Or query = Person.objects() and then 
-        if params.get('fName'):
-            query = query.filter(fName = params['fName'])
-        if params.get('comYearMIN'):
-            query = query.filter(comYear > int(params['comYearMIN']))
-
-        and then at the end:
-        return [person.to_json() for person in query]
-
         """
         params = request.args
         query = Person.objects()
