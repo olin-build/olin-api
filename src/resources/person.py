@@ -4,6 +4,7 @@ database of Olin people """
 from flask import Blueprint, request
 from flask_restful import Resource, Api
 from src.document_models import Person
+from mongoengine.errors import NotUniqueError
 
 # Blueprint setup
 people = Blueprint('people', __name__)
@@ -27,45 +28,66 @@ class PersonEndpoint(Resource):
             comYearMIN  Minimum community year of the user (inclusive)
             comYearMAX  Maximum community year of the user (inclusive)
         """
-        params = request.args
-        query = Person.objects()
-        if params.get('fName'):
-            query = query.filter(fName = params['fName'])
-        if params.get('lName'):
-            query = query.filter(lName = params['lName'])
-        if params.get('email'):
-            query = query.filter(email = params['email'])
-        if params.get('comYearMIN'):
-            query = query.filter(comYear__gte = int(params['comYearMIN']))
-        if params.get('comYearMAX'):
-            query = query.filter(comYear__lte = int(params['comYearMAX']))
-        return [person.to_json() for person in query]
+        try:
+            params = request.args
+            query = Person.objects()
+            if params.get('fName'):
+                query = query.filter(fName = params['fName'])
+            if params.get('lName'):
+                query = query.filter(lName = params['lName'])
+            if params.get('email'):
+                query = query.filter(email = params['email'])
+            if params.get('comYearMIN'):
+                query = query.filter(comYear__gte = int(params['comYearMIN']))
+            if params.get('comYearMAX'):
+                query = query.filter(comYear__lte = int(params['comYearMAX']))
+            return {'response': {'ok': 1.0}, 'searched':[person.to_json() for person in query]}
+
+        except Exception as e:
+            return {'response': {'ok': 0.0, 'error': str(e)}, 'searched': None}
 
     def put(self):
+        try:
+            params = request.args
+            putQuery = Person.objects()
+            if params.get('fName'):
+                putQuery = putQuery.filter(fName = params['fName'])
+            if params.get('lName'):
+                putQuery = putQuery.filter(lName = params['lName'])
+            if params.get('email'):
+                putQuery = putQuery.filter(email = params['email'])
+            if params.get('comYearMIN'):
+                putQuery = putQuery.filter(comYear__gte = int(params['comYearMIN']))
+            if params.get('comYearMAX'):
+                putQuery = putQuery.filter(comYear__lte = int(params['comYearMAX']))
+            edited_ids = [person.id for person in putQuery]
+            serverResponse = putQuery.update(full_result = True, **request.json)
+            return {'response': serverResponse, 'edited': [person.to_json() for person in Person.objects(id__in = edited_ids)]}
+
+        except NotUniqueError: #email is the only unique index users can access, since object id cannot be searched or created manually.
+            return {'response': {'ok': 0, 'error': "Email {} already exists".format(request.json['email'])}, 'edited': None}
+
+        except Exception as e:
+            return {'response': {'ok': 0, 'error': str(e)}, 'edited': None}
+
+
+    def post(self):
         """
         If requests.json's fields do not match those defined in the Person model, this fails. 
         See documentation for src.document_models.Person for more details.
         """
-        object = Person(**request.json) 
-        object.save()
-        return object.to_json()
+        try:
+            object = Person(**request.json) 
+            object.save()
+            return {'response': {'ok': 1.0}, 'created': object.to_json()}
 
+        except NotUniqueError:
+            return {'response': {'ok': 0, 'error': "Email {} already exists".format(request.json['email'])}, 'created': None}
+            
+        except Exception as e:
+            return {'response': {'ok': 0, 'error': str(e)}, 'created': None}
+        
 
-    def post(self):
-        params = request.args
-        postQuery = Person.objects()
-        if params.get('fName'):
-            postQuery = postQuery.filter(fName = params['fName'])
-        if params.get('lName'):
-            postQuery = postQuery.filter(lName = params['lName'])
-        if params.get('email'):
-            postQuery = postQuery.filter(email = params['email'])
-        if params.get('comYearMIN'):
-            postQuery = postQuery.filter(comYear__gte = int(params['comYearMIN']))
-        if params.get('comYearMAX'):
-            postQuery = postQuery.filter(comYear__lte = int(params['comYearMAX']))
-        postQuery.update(**request.json)
-        return "Update Request Received"
 
 
 # Resources
