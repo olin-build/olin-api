@@ -41,10 +41,10 @@ class PersonEndpoint(Resource):
                 query = query.filter(comYear__gte = int(params['comYearMIN']))
             if params.get('comYearMAX'):
                 query = query.filter(comYear__lte = int(params['comYearMAX']))
-            return {'response': {'ok': 1.0}, 'searched':[person.to_json() for person in query]}
+            return {'response': {'ok': 1.0}, 'results':[person.to_json() for person in query]}
 
         except Exception as e:
-            return {'response': {'ok': 0.0, 'error': str(e)}, 'searched': None}
+            return {'response': {'ok': 0.0, 'error': str(e)}, 'results': None}
 
     def put(self):
         try:
@@ -62,13 +62,13 @@ class PersonEndpoint(Resource):
                 putQuery = putQuery.filter(comYear__lte = int(params['comYearMAX']))
             edited_ids = [person.id for person in putQuery]
             serverResponse = putQuery.update(full_result = True, **request.json)
-            return {'response': serverResponse, 'edited': [person.to_json() for person in Person.objects(id__in = edited_ids)]}
+            return {'response': serverResponse, 'results': [person.to_json() for person in Person.objects(id__in = edited_ids)]}
 
         except NotUniqueError: #email is the only unique index users can access, since object id cannot be searched or created manually.
-            return {'response': {'ok': 0, 'error': "Email {} already exists".format(request.json['email'])}, 'edited': None}
+            return {'response': {'ok': 0.0, 'error': "Email {} already exists".format(request.json['email'])}, 'results': None}
 
         except Exception as e:
-            return {'response': {'ok': 0, 'error': str(e)}, 'edited': None}
+            return {'response': {'ok': 0.0, 'error': str(e)}, 'results': None}
 
 
     def post(self):
@@ -79,13 +79,13 @@ class PersonEndpoint(Resource):
         try:
             object = Person(**request.json) 
             object.save()
-            return {'response': {'ok': 1.0}, 'created': object.to_json()}
+            return {'response': {'ok': 1.0}, 'results': object.to_json()}
 
         except NotUniqueError:
-            return {'response': {'ok': 0, 'error': "Email {} already exists".format(request.json['email'])}, 'created': None}
+            return {'response': {'ok': 0.0, 'error': "Email {} already exists".format(request.json['email'])}, 'results': None}
             
         except Exception as e:
-            return {'response': {'ok': 0, 'error': str(e)}, 'created': None}
+            return {'response': {'ok': 0.0, 'error': str(e)}, 'results': None}
         
 
 

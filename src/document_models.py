@@ -37,21 +37,3 @@ class Person(Document):
     # BOW students?
     # allergies/diet
     # image/gravatar
-
-# if __name__ == "__main__":
-#     from database_connection_mongoengine import make_connection
-#     from document_models import Person
-#     make_connection()
-#     Person.drop_collection()
-#     people = [
-#     {"fName": "John", "lName": "Doe", "comYear": 2015, "email": "JohnDoe@students.olin.edu", "pronouns": "He/Him/His", "preferredName": "John", "services":{"venmo":"jDoe109", "messenger":"Doeboy"}},
-#     {"fName": "Jane", "lName": "Doe", "comYear": 2015, "email": "JaneDoe@students.olin.edu", "pronouns": "She/Her/Hers", "preferredName": "Jane"},
-#     {"fName": "Alan", "lName": "Smith", "comYear": 2016, "email": "AlanSmith@students.olin.edu", "pronouns": "They/Them/Theirs", "preferredName":"Alan"},
-#     {"fName": "Bob", "lName": "Burger", "comYear": 2016, "email": "BobBurger@students.olin.edu", "pronouns": "It/It/Its", "preferredName": "Burger"},
-#     {"fName": "Susan", "lName": "Green", "comYear": 2017, "email": "SusanGreen@students.olin.edu", "pronouns": "She/Her/Hers", "preferredName": "Suzie"},
-#     {"fName": "Marianne", "lName": "Moss", "comYear": 2017, "email": "MarianneMoss@students.olin.edu", "pronouns": "She/Her/Hers", "preferredName": "Carrie"},
-#     ]
-
-#     for dct in people:
-#         item = Person(**dct)
-#         item.save()
