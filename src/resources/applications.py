@@ -1,7 +1,7 @@
 """ Exists at `/apps` and allows for registration of applications which
 intend to use the Olin API """
 
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, make_response
 from flask_restful import Resource, Api
 from mongoengine.errors import NotUniqueError, ValidationError
 from ..document_models import Application
@@ -28,12 +28,12 @@ class RegisterApp(Resource):
         # application point of contact email
         if not 'contact' in params:
             resp = {'message': 'Request must include \'contact\' parameter.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         # application name
         if not 'name' in params:
             resp = {'message': 'Request must include \'name\' parameter.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         # have they "signed" the honor code?
         # see `HONOR-CODE.md`
@@ -43,14 +43,14 @@ class RegisterApp(Resource):
                                'Honor Code found at '
                                'https://github.com/DakotaNelson/olin-api'
                                '/blob/master/HONOR-CODE.md'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         # TODO conversion to bool is gross and mistake-prone
         if  bool(params['honorcode']) != True:
             # TODO include link to honor code
             resp = {'message': 'You must agree to the Olin API Honor Code'
                                ' in order to use the Olin API.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         try:
             desc = params['description']
@@ -70,12 +70,12 @@ class RegisterApp(Resource):
         except NotUniqueError:
             resp = {"message": "Application with that name and "
                                "contact email already exists."}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
         except ValidationError:
             resp = {"message": "Application contact must be a properly "
                                "formatted email address, and application name "
                                "must be 140 characters or less."}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         # if the app successfully made it to the DB, add in its details
         # (double-save is inefficient but the code is simpler to grok)
@@ -89,7 +89,7 @@ class RegisterApp(Resource):
                                "formatted URL. (Make sure to include "
                                "\'http://\')"}
             app.delete()
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         # generate and return application auth token
         token = app.generate_token()
@@ -118,7 +118,7 @@ class RegisterApp(Resource):
                     'token': token,
                     'validated': True}
 
-        return make_response(jsonify(resp), 200)
+        return resp, 200
 
     # TODO some way to re-issue tokens
     # we can't allow just anyone to delete an app, but if we require the app
@@ -134,12 +134,12 @@ class RegisterApp(Resource):
     #     # application point of contact email
     #     if not 'contact' in params:
     #         resp = {'message': 'Request must include \'contact\' parameter.'}
-    #         return make_response(jsonify(resp), 400)
+    #         return resp, 400
     #
     #     # application name
     #     if not 'name' in params:
     #         resp = {'message': 'Request must include \'name\' parameter.'}
-    #         return make_response(jsonify(resp), 400)
+    #         return resp, 400
     #
     #     Application.objects(contact=params['contact'],
     #                         name=params['name']).delete()
@@ -148,7 +148,7 @@ class RegisterApp(Resource):
     #     # that application" because it would allow people to fish for apps
     #     # being used in the API
     #     resp = {"message": "Success! If that application existed, it has been deleted."}
-    #     return make_response(jsonify(resp), 200)
+    #     return resp, 200
 
 
 class ValidateApp(Resource):

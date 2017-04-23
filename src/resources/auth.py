@@ -1,6 +1,6 @@
 """ Exists at `/auth` and allows for authentication of users """
 
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, make_response
 from flask_restful import Resource, Api
 from mongoengine.errors import DoesNotExist
 from ..document_models import Token, Application
@@ -23,16 +23,16 @@ class RequestToken(Resource):
 
         if not 'email' in params:
             resp = {'message': 'Request must include \'email\' parameter.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         if not 'apptoken' in params:
             resp = {'message': 'Request must include \'apptoken\' parameter.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         app = Application.verify_token(params['apptoken'])
         if app is None:
             resp = {'message': 'Application token is invalid.'}
-            return make_response(jsonify(resp), 401)
+            return resp, 401
 
         # try to find a matching token that already exists, or create a new one
         # could do an upsert here, but it'd be less readable
@@ -62,7 +62,7 @@ class RequestToken(Resource):
             # token is already valid
             resp = {'message': 'Success! Email has already been proven, so you\'re good to go.',
                     'token': token_value, "validated": True}
-        return make_response(jsonify(resp), 200)
+        return resp, 200
 
     def delete(self):
         """ Deletes an access token record, rendering the associated token
@@ -72,7 +72,7 @@ class RequestToken(Resource):
 
         if not 'email' in params:
             resp = {'message': 'Request must include \'email\' parameter.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         Token.objects(email=params['email']).delete()
 
@@ -80,7 +80,7 @@ class RequestToken(Resource):
         # that email" because it would allow people to fish for emails being
         # used in the API
         resp = {"message": "Success! If there was a token associated with that email address, it has been deleted."}
-        return make_response(jsonify(resp), 200)
+        return resp, 200
 
 
 class ValidateToken(Resource):
@@ -106,18 +106,18 @@ class Authenticate(Resource):
 
         if not 'token' in params:
             resp = {'message': 'Request must include \'token\' parameter.'}
-            return make_response(jsonify(resp), 400)
+            return resp, 400
 
         email = Token.verify_token(params['token'])
 
         if email is None:
             resp = {'message': 'Invalid auth token.', 'valid': False}
-            return make_response(jsonify(resp), 401)
+            return resp, 401
 
         resp = {'message': 'Success! Auth token is valid.',
                 'email': email,
                 'valid': True}
-        return make_response(jsonify(resp), 200)
+        return resp, 200
 
 
 
