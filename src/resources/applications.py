@@ -18,7 +18,10 @@ class RegisterApp(Resource):
         This will grant them an application token which can later be used to
         either access client-specific resources or request an authorization
         token that will grant the application access to the API on a user's
-        behalf. """
+        behalf.
+
+        Users must agree to the Olin API Honor Code at
+        https://github.com/DakotaNelson/olin-api/blob/master/HONOR-CODE.md """
 
         params = request.get_json()
 
@@ -33,8 +36,13 @@ class RegisterApp(Resource):
             return make_response(jsonify(resp), 400)
 
         # have they "signed" the honor code?
+        # see `HONOR-CODE.md`
         if not 'honorcode' in params:
-            resp = {'message': 'Request must include \'honorcode\' parameter.'}
+            resp = {'message': 'Request must include \'honorcode\' parameter '
+                               'signifying that you will abide by the Olin API '
+                               'Honor Code found at '
+                               'https://github.com/DakotaNelson/olin-api'
+                               '/blob/master/HONOR-CODE.md'}
             return make_response(jsonify(resp), 400)
 
         # TODO conversion to bool is gross and mistake-prone
@@ -94,6 +102,7 @@ class RegisterApp(Resource):
                                          token=validation_token,
                                          _external=True)
 
+            # TODO actual email template that isn't terrible
             send_email(params['contact'],
                        "Here's your Olin-API validation token",
                        "<a href=\"{}\">Click here</a>".format(validation_url))
@@ -148,13 +157,15 @@ class ValidateApp(Resource):
         requester's email address), check that it is good, then mark the
         corresponding app as valid """
         if Application.verify_validation_token(token):
-            resp = 'Success! Thanks!'
+            resp = ('Success - thanks! Make sure you have read and understood '
+                    'the <a href="https://github.com/DakotaNelson/olin-api/'
+                    'blob/master/HONOR-CODE.md">Olin API Honor Code</a>.')
             # TODO better message/page for user? include name of authorized app?
-            return resp, 200
+            return make_response(resp, 200)
         else:
             resp = ('Unable to validate authentication token. Your validation '
                     'token is either invalid or expired.')
-            return resp, 400
+            return make_response(resp, 400)
 
 
 class ListApps(Resource):
@@ -165,11 +176,13 @@ class ListApps(Resource):
         # TODO return more information
         apps_clean = []
         for app in apps:
-            apps_clean.append(
-                {"name": app["name"]}
-            )
+            # don't include invalid apps
+            if app["validated"] is True:
+                apps_clean.append(
+                    {"name": app["name"]}
+                )
 
-        return make_response(jsonify(apps_clean), 200)
+        return apps_clean, 200
 
 
 

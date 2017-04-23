@@ -51,6 +51,7 @@ class RequestToken(Resource):
                                          token=validation_token,
                                          _external=True)
 
+            # TODO actual email template that isn't terrible
             send_email(params['email'],
                        "Here's your Olin-API validation token",
                        "<a href=\"{}\">Click here</a>".format(validation_url))
@@ -90,10 +91,10 @@ class ValidateToken(Resource):
         if Token.verify_validation_token(token):
             resp = 'Success! Thanks!'
             # TODO better message/page for user? include name of authorized app?
-            return resp, 200
+            return make_response(resp, 200)
         else:
             resp = 'Unable to validate authentication token. Your validation token is either invalid or expired.'
-            return resp, 400
+            return make_response(resp, 400)
 
 
 class Authenticate(Resource):
@@ -107,13 +108,15 @@ class Authenticate(Resource):
             resp = {'message': 'Request must include \'token\' parameter.'}
             return make_response(jsonify(resp), 400)
 
-        person = Token.verify_token(params['token'])
+        email = Token.verify_token(params['token'])
 
-        if person is None:
+        if email is None:
             resp = {'message': 'Invalid auth token.', 'valid': False}
             return make_response(jsonify(resp), 401)
 
-        resp = {'message': 'Success! Auth token is valid.', 'valid': True}
+        resp = {'message': 'Success! Auth token is valid.',
+                'email': email,
+                'valid': True}
         return make_response(jsonify(resp), 200)
 
 

@@ -4,6 +4,8 @@ Olin-api seeks to provide programmatic access to a wide variety of Olin College 
 
 # Getting Started
 
+**First: read and understand the [Olin API Honor Code](HONOR-CODE.md).**
+
 The `./bin/` directory contains a number of scripts which will help you get started:
 
  - `lint.sh` - lint the codebase to ensure quality

@@ -86,7 +86,7 @@ class Token(Document):
         # disabled - this creates an unfortunate linkage between the API types
         # (i.e. what do we do if someone has no person profile but we still
         # want to auth them?)
-        return True
+        return token['email']
 
     def generate_validation_token(self):
         """ Creates and saves an token to be sent in an email to the email
@@ -147,6 +147,11 @@ class Application(Document):
     def verify_token(token):
         """ ensures that the application token passed to it is valid, returns
         the correct app object based on the token passed to it """
+        # IMPORTANT NOTE: any app with the same name + contact email combo will
+        # work for ANY token issued to an app with identical name + email. If an
+        # old app is deleted and a new one is made with that same combo, OLD
+        # TOKENS WILL STILL WORK (provided they're not timed out, new app is
+        # validated, etc.)
         serializer = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = serializer.loads(token)
@@ -166,25 +171,27 @@ class Application(Document):
         # 'salt' is actually a namespace - see:
         # http://pythonhosted.org/itsdangerous/#the-salt
         salt = current_app.config['VALIDATION_TOKEN_SALT']
-        return serializer.dumps(self.contact, salt=salt)
+        return serializer.dumps({'contact': self.contact, 'name': self.name},
+                                salt=salt)
 
     @staticmethod
-    def verify_validation_token(app, expiration=12*3600):
+    def verify_validation_token(token, expiration=12*3600):
         """ verifies a registration token, sets the 'validated' field of the
         corresponding token to True """
         salt = current_app.config['VALIDATION_TOKEN_SALT']
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         try:
-            email = serializer.loads(
-                app,
+            payload = serializer.loads(
+                token,
                 salt=salt,
                 max_age=expiration)
         except:
             return False
         try:
-            appObj = Application.objects.get(contact=email)
-            appObj.validated = True
-            appObj.save()
+            app = Application.objects.get(contact=payload['contact'],
+                                          name=payload['name'])
+            app.validated = True
+            app.save()
         except DoesNotExist:
             # for some reason, we're validating an app that doesn't exist...
             return False
