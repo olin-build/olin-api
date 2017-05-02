@@ -103,6 +103,8 @@ All URL endpoints are ‘/’.
 
 If python’s request module and its associated request methods are used, they return an object whose `.json()` method returns a nested dictionary with server response (whether the intended action succeeded, as well as other information like error messages) and results (the information provided by the server).
 
+**Get**
+
 A `GET` request to `<app_url>/people/?<search_arguments>` lets a user search the `Person` collection in mongoDB, and returns a list of objects matching the search. It does this by  then filtering (with `.filter(field = value)`) the objects in the Person collection (`Person.objects`).
 
 Currently, we support searches for Person documents that match a `fName`, `lName` and `email`, as well as Person documents whose `comYears` are larger than `comYearMIN` or smaller than `comYearMAX`. An example query is 
@@ -111,6 +113,17 @@ get_request = get('http://olin-api.herokuapp.com/people/?fName=John&lName=Doe&co
 ```
 If the request is successful, `get_request.json()[‘results’]` will contain a list of objects matching the search.
 
+
+**PUT**
+
+A `PUT` request to `<app_url>/people/?<search_arguments>` lets a user edit a selection of Person documents based on an identical search criteria to the `GET` request. The fields and values in the `PUT` request's URL filter the collection just like the `GET` request, then `.update(**json)` updates the filtered collection in the appropriate manner. An example query is:
+```python
+put_request = put('http://olin-api.herokuapp.com/people/?comYearMIN=2018&comYearMAX=2018', json={'comYear':2019})
+```
+If the request is successful, `put_request.json()[‘results’]` will contain a list of edited objects.
+
+
+**POST**
 
 A `POST` request to `<app_url>/people/` lets a user insert a new `Person` document into the collection by creating a new `Person` document, populating its fields with json data (included in the request) and calling the `.save()` method.
 
@@ -121,8 +134,7 @@ post_request = post('http://olin-api.herokuapp.com/people/', json={'fName':'Abra
 
 If the request is successful, `post_request.json()[‘results’]` will contain the created object.
 
-A `PUT` request to `<app_url>/people/?<search_arguments>` lets a user edit a selection of Person documents based on an identical search criteria to the `GET` request. The fields and values in the `PUT` request's URL filter the collection just like the `GET` request, then `.update(**json)` updates the filtered collection in the appropriate manner. An example query is:
-```python
-put_request = put('http://olin-api.herokuapp.com/people/?comYearMIN=2018&comYearMAX=2018', json={'comYear':2019})
-```
-If the request is successful, `put_request.json()[‘results’]` will contain a list of edited objects.
+
+# Dev Guide
+
+Instructions on how to add/edit document templates, new resources, etc. To be updated.
