@@ -21,7 +21,20 @@ class RegisterApp(Resource):
         behalf.
 
         Users must agree to the Olin API Honor Code at
-        https://github.com/DakotaNelson/olin-api/blob/master/HONOR-CODE.md """
+        https://github.com/DakotaNelson/olin-api/blob/master/HONOR-CODE.md
+
+        :param str contact: An email address to use as a designated contact \
+                for the application.
+        :param str name: The name of the application.
+        :param bool honorcode: A boolean value indicating whether or not the \
+                requester has read and agrees to the Olin API Honor Code.
+        :param str description: A description of the application.
+        :param str homepage: A URL pointing to the application's website.
+
+        :statuscode 200: Success
+        :statuscode 400: A JSON request parameter is missing or incorrect, \
+                or an app with the name and contact email already exist.
+        """
 
         params = request.get_json()
 
@@ -155,7 +168,12 @@ class ValidateApp(Resource):
     def get(self, token):
         """ Given a validation token (what is sent in an email to the token
         requester's email address), check that it is good, then mark the
-        corresponding app as valid """
+        corresponding app as valid
+
+        :statuscode 200: Success
+        :statuscode 400: The validation token provided is either invalid or \
+                expired.
+        """
         if Application.verify_validation_token(token):
             resp = ('Success - thanks! Make sure you have read and understood '
                     'the <a href="https://github.com/DakotaNelson/olin-api/'
@@ -170,7 +188,10 @@ class ValidateApp(Resource):
 
 class ListApps(Resource):
     def get(self):
-        """ List all currently registered applications """
+        """ List all currently registered applications
+
+        :statuscode 200: Success
+        """
         apps = Application.objects()
 
         # TODO return more information
