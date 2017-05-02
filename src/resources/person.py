@@ -48,7 +48,6 @@ class PersonEndpoint(Resource):
     def put(self):
         """
         Edits one or more user objects. Search params identical to get().
-
         The nature of the edit is based on the json component of the request.
         """
         try:
