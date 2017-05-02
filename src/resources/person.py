@@ -46,6 +46,10 @@ class PersonEndpoint(Resource):
             return {'response': {'ok': 0.0, 'error': str(e)}, 'results': None}
 
     def put(self):
+        """
+        Edits one or more user objects. Search params identical to get().
+        The nature of the edit is based on the json component of the request.
+        """
         try:
             params = request.args
             putQuery = Person.objects()
