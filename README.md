@@ -25,9 +25,11 @@ The `./bin/` directory contains a number of scripts which will help you get star
 
 # API Components
 
-### API URL
+### API Architecture
 
-Olin-api is hosted at `http://olin-api.herokuapps.com`. Accessing a sub-resource like `auth` is as simple as sending a request to `http://olin-api.herokuapps.com/auth/` and its endpoints! 
+Data is stored in [MongoDB](https://www.mongodb.com/) and accessed by the various resources written in [flask](http://flask.pocoo.org/) via the [mongoengine](http://mongoengine.org/) connector. Each resource (people, auth, etc.) is linked to one or more corresponding mongoDB collections (Person, Token, Application, etc.).
+
+Olin-api is hosted at `http://olin-api.herokuapps.com`. Accessing a sub-resource like `auth` is as simple as sending a request to `http://olin-api.herokuapps.com/auth/` and its endpoints!
 
 ### Authentication
 
@@ -48,7 +50,7 @@ Full authentication documentation can be found [here](AUTH.md).
 
 ### People
 
-The People resources provides access to data and metadata about Olin community members. Everything at Olin is done by people, so it’s probably valuable to keep some records!
+The `People` resources provides access to the `Person` collection in our mongoDB database. This lets users access data and metadata about Olin community members. Everything at Olin is done by people, so it’s probably valuable to keep some records!
 
 We store Person documents in the mongoDB backend. Each Person document has a number of fields as follows:
 ```python
@@ -101,21 +103,25 @@ All URL endpoints are ‘/’.
 
 If python’s request module and its associated request methods are used, they return an object whose `.json()` method returns a nested dictionary with server response (whether the intended action succeeded, as well as other information like error messages) and results (the information provided by the server).
 
-A `GET` request to `<app_url>/people/?<search_arguments>` lets a user search for Person documents. Currently, we support searches for Person documents that match a `fName`, `lName` and `email`, as well as Person documents whose `comYears` are larger than `comYearMIN` or smaller than `comYearMAX`. An example query is 
+A `GET` request to `<app_url>/people/?<search_arguments>` lets a user search the `Person` collection in mongoDB, and returns a list of objects matching the search. It does this by  then filtering (with `.filter(field = value)`) the objects in the Person collection (`Person.objects`).
+
+Currently, we support searches for Person documents that match a `fName`, `lName` and `email`, as well as Person documents whose `comYears` are larger than `comYearMIN` or smaller than `comYearMAX`. An example query is 
 ```python
 get_request = get('http://olin-api.herokuapp.com/people/?fName=John&lName=Doe&comYearMIN=2015&comYearMAX=2016')
 ```
 If the request is successful, `get_request.json()[‘results’]` will contain a list of objects matching the search.
 
 
-A `POST` request to `<app_url>/people/` lets a user insert a new Person document into the database by encoding the appropriate fields and values into the request’s json argument. If requests.json's fields do not match those defined in the Person model, this fails. An example query is: 
+A `POST` request to `<app_url>/people/` lets a user insert a new `Person` document into the collection by creating a new `Person` document, populating its fields with json data (included in the request) and calling the `.save()` method.
+
+To do so, include the appropriate fields and values into the request’s json argument. If requests.json's fields do not match those defined in the Person model, this fails. An example query is: 
 ```python
 post_request = post('http://olin-api.herokuapp.com/people/', json={'fName':'Abraham','lName':'Brown','comYear':2018, 'preferredName':'Abe', 'email':'AbeBrown@students.olin.edu'})
 ```
 
 If the request is successful, `post_request.json()[‘results’]` will contain the created object.
 
-A `PUT` request to `<app_url>/people/?<search_arguments>` lets a user edit a selection of Person documents based on an identical search criteria to the GET request. The request’s json argument specifies the nature of the change. An example query is:
+A `PUT` request to `<app_url>/people/?<search_arguments>` lets a user edit a selection of Person documents based on an identical search criteria to the `GET` request. The fields and values in the `PUT` request's URL filter the collection just like the `GET` request, then `.update(**json)` updates the filtered collection in the appropriate manner. An example query is:
 ```python
 put_request = put('http://olin-api.herokuapp.com/people/?comYearMIN=2018&comYearMAX=2018', json={'comYear':2019})
 ```
