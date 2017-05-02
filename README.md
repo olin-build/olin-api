@@ -2,7 +2,7 @@
 
 Olin-api seeks to provide programmatic access to a wide variety of Olin College digital resources. It is meant to provide the foundation for a variety of student-built applications to benefit the community.
 
-This README primarily covers getting started developing on the API code itself. If you'd like to simply use the existing API resources, you can refer to the [usage docs](http://olin-api.readthedocs.io).
+This README primarily covers getting started developing on the API code itself. If you'd like to simply use the existing API resources, you can refer to the [usage docs](http://olin-api.readthedocs.io) or the Wiki (in the "Wiki" tab on Github).
 
 # Getting Started
 
